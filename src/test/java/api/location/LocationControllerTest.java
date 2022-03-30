@@ -46,7 +46,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void getCountries_shouldReturAListOf1Item() throws Exception {
+    public void getCountries_shouldReturnAListOf1Item() throws Exception {
 
         when(dummyService.testMethod2()).thenReturn(-2);
 
@@ -58,7 +58,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void getCountries_shouldReturAListOf2Items() throws Exception {
+    public void getCountries_shouldReturnAListOf2Items() throws Exception {
 
         Country country1 = new Country("Cambodia");
         Country country2 = new Country("Thailand");
