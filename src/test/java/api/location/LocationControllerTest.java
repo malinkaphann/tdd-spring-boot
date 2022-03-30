@@ -1,20 +1,13 @@
 package api.location;
-/*
- * User: ohahlev@gmail.com
- * Project: api
- * Date: 8/9/20
- * Here is some description
- */
 
 import java.util.List;
-
 import api.location.controller.LocationController;
 import api.location.domain.Country;
+import api.location.service.DummyService;
 import api.location.service.LocationService;
 import org.junit.Test;
 import java.util.ArrayList;
 import org.junit.runner.RunWith;
-
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.isA;
 import static org.mockito.Mockito.when;
@@ -37,18 +30,49 @@ public class LocationControllerTest {
     @MockBean
     LocationService locationService;
 
-    @Test
-    public void getCountries_shouldReturnCountries() throws Exception {
+    @MockBean
+    DummyService dummyService;
 
-        Country country = new Country("Cambodia");
+    @Test
+    public void getCountries_shouldReturnEmptyList() throws Exception {
+
+        when(dummyService.testMethod1()).thenReturn(-1);
+
+        mockedMvc.perform(MockMvcRequestBuilders.get("/countries"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.*", isA(ArrayList.class)))
+                .andExpect(jsonPath("$.*", hasSize(0)));
+    }
+
+    @Test
+    public void getCountries_shouldReturAListOf1Item() throws Exception {
+
+        when(dummyService.testMethod2()).thenReturn(-2);
+
+        mockedMvc.perform(MockMvcRequestBuilders.get("/countries"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.*", isA(ArrayList.class)))
+                .andExpect(jsonPath("$.*", hasSize(1)));
+    }
+
+    @Test
+    public void getCountries_shouldReturAListOf2Items() throws Exception {
+
+        Country country1 = new Country("Cambodia");
+        Country country2 = new Country("Thailand");
         List<Country> countries = new ArrayList<Country>();
-        countries.add(country);
+        countries.add(country1);
+        countries.add(country2);
 
         when(locationService.getCountries()).thenReturn(countries);
 
-        mockedMvc.perform(MockMvcRequestBuilders.get("/countries")).andExpect(status().isOk())
+        mockedMvc.perform(MockMvcRequestBuilders.get("/countries"))
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.*", isA(ArrayList.class))).andExpect(jsonPath("$.*", hasSize(1)));
+                .andExpect(jsonPath("$.*", isA(ArrayList.class)))
+                .andExpect(jsonPath("$.*", hasSize(2)));
     }
 
 }

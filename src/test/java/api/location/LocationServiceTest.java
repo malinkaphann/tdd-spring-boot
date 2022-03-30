@@ -1,10 +1,4 @@
 package api.location;
-/*
- * User: ohahlev@gmail.com
- * Project: api
- * Date: 8/9/20
- * Here is some description
- */
 
 import api.location.domain.Country;
 import api.location.repository.LocationRepository;
@@ -34,8 +28,11 @@ public class LocationServiceTest {
 
     @Test
     public void getCountries_shouldReturnCountries() {
+
         given(locationRepository.findAll()).willReturn(new ArrayList<Country>());
+
         List<Country> countries = locationService.getCountries();
+
         assertTrue(countries.size() == 0);
     }
 
